@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.AllArgsConstructor;
@@ -29,7 +30,8 @@ public class Board {
 	
 	@CreationTimestamp
 	private Timestamp createDate;
-
+	@ColumnDefault("0")
+	private int count;
 	// Many(게시글) to One(사용자) >> 하나의 사용자가 여러 게시글을 쓸 수 있음.
 	// 현재 클래스가 주체가 됨
 	

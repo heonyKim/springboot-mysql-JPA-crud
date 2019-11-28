@@ -1,10 +1,5 @@
 package com.cos.crud.utils;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.http.HttpServletResponse;
-
 public class Script {
 	public String back(String msg){
 	
@@ -14,6 +9,17 @@ public class Script {
 		sb.append("history.back();");
 		sb.append("</script>");
 	
+		return sb.toString();
+	}
+	
+	public String backHref(String msg, String location){
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("<script>");
+		sb.append("alert('"+msg+"');");
+		sb.append("location.href='"+location+"'");
+		sb.append("</script>");
+		
 		return sb.toString();
 	}
 	

@@ -1,7 +1,6 @@
 package com.cos.crud.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,21 +15,27 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cos.crud.model.Board;
-import com.cos.crud.model.User;
-import com.cos.crud.repository.BoardRepository;
+import com.cos.crud.service.BoardService;
 import com.cos.crud.utils.Script;
 
 @Controller
 public class BoardController {
 
 	@Autowired
-	private BoardRepository mRepo;
+	private BoardService mService;
 	Script script = new Script();
+	
+	////////////트랜잭션 테스트//////////////
+	@PostMapping("/ict/{id}")
+	public @ResponseBody String increaseCountAndTimeUpdate(@PathVariable int id) {
+		mService.increaseCountAndTimeUpdate(id);
+		return "test완료";
+	}
 	
 	@GetMapping("/board/list")
 	public String boardList(Model model) {
 		
-		List<Board> boards = mRepo.findAll();
+		List<Board> boards = mService.boardList();
 		model.addAttribute("boards",boards);
 		return "/board/list";
 	}
@@ -47,72 +52,67 @@ public class BoardController {
 	public String boardDetail(@PathVariable int id, Model model) {
 		
 		//결과값이 Null로 나올 수 있으므로 Optional로 감싸면 Null이 안나옴
-		Optional<Board> board = mRepo.findById(id);
-		model.addAttribute("board",board.get());
+		Board board = mService.boardDetail(id);
+		model.addAttribute("board",board);
 		return "/board/detail";
 	}
+	
+	
+	
 	///////////////////////////////////////////////////////////////////	
 	
 	@GetMapping("/board/writeForm")
-	public String boardWriteForm(HttpSession session) {
-		//인터셉터 처리(AOP)
-		User user = (User) session.getAttribute("user"); 
+	public String boardWriteForm() {
+		return "/board/writeForm";
 
-		if(user !=null) {
-			return "/board/writeForm";
-		}else {
-			return "/user/loginForm";
-		}
 	}
 	
 	@PostMapping("/board/write")
-	public @ResponseBody String boardWrite(Board board,HttpSession session) {
-		//인터셉터 처리(AOP)
-		User user = (User) session.getAttribute("user"); 
-
-		if(user !=null) {
-			board.setUser(user);
-			mRepo.save(board);
-			return script.href("/board/list");
-		}else {
-			return script.href("/user/loginForm");
-		}
+	public String boardWrite(Board board,HttpSession session) {
+		int result = mService.boardWrite(board, session);
 		
-		//redirect:/는 response.SendRedirect()랑 같음
+		if(result ==1) {
+			return "redirect:/board/list";
+		}else {
+			return "/board/writeForm";
+		}
 	}
+	
 	
 	///////////////////////////////////////////////////////////////////	
 	
 	@DeleteMapping("/board/delete/{id}")
-	public String boardDelete(@PathVariable int id) {
-		//세션있어야되는데 안해
-		mRepo.deleteById(id);
-		return "redirect:/board/list";
+	public @ResponseBody String boardDelete(@PathVariable int id) {
+
+		int result=mService.boardDelete(id);
+		if(result==1) {
+			return script.href("/board/list");
+		}else {
+			return script.back("삭제 실패");
+		}
+
+		
 	}
 	///////////////////////////////////////////////////////////////////
 	@GetMapping("/board/updateForm/{id}")
-	public String boardUpdateFrom(@PathVariable int id,Model model) {
-		//세션있어야되는데 안해
-		Optional<Board> board = mRepo.findById(id);
-		System.out.println(board);
-		model.addAttribute("board",board.get());
+	public String boardUpdateForm(@PathVariable int id,Model model) {
+
+		Board board = mService.boardUpdateForm(id);
+		model.addAttribute("board",board);
 		
 		return "board/updateForm";
 	}
 	
 	@PutMapping("/board/update")
 	public @ResponseBody String boardUpdate(Board board,HttpSession session) {
-		User user = (User) session.getAttribute("user");
-		System.out.println(board);
-		if(user!=null) {
-			board.setUser(user);
-			mRepo.save(board);
+		
+		int result = mService.boardUpdate(board, session);
+		
+		if(result ==1) {
 			return script.href("/board/list");
 		}else {
-			return script.href("/board/loginForm");
+			return script.backHref("업데이트 실패", "/board/list");
 		}
-		
-		
 	}
 	
 }
