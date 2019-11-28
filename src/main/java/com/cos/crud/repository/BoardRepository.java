@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.cos.crud.model.Board;
 
-
+                                                                             
 //CRUD를 구현해주는 클래스 : JpaRePository
 public interface BoardRepository extends JpaRepository<Board, Integer>{
 	

@@ -33,3 +33,12 @@ spring:
       charset: UTF-8
       enabled: true
       force: true
+  
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+
+      
+file: 
+  path: G:/workspace/springWork/jpa-crud/src/main/resources/upload/
