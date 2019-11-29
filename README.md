@@ -1,12 +1,12 @@
-# springboot-mysql-JPA-crud
-
+# springboot + mysql + JPA + CRUD + SERVICE + Transaction
+###SQL
 ```sql
 create user 'ssar'@'%' identified by 'bitc5600';
 grant all privileges on *.* to 'ssar'@'%';
 create database ssar;
 use ssar;
 ```
-
+###application.yml문
 ```yml
 server:
   port: 8070
@@ -54,7 +54,7 @@ file:
   path: G:/workspace/springWork/jpa-crud/src/main/resources/upload/
 ```
   
-  
+###pom.xml문
 ```xml
   <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
