@@ -1,6 +1,13 @@
 # springboot-mysql-JPA-crud
 
-'''yml
+```sql
+create user 'ssar'@'%' identified by 'bitc5600';
+grant all privileges on *.* to 'ssar'@'%';
+create database ssar;
+use ssar;
+```
+
+```yml
 server:
   port: 8070
   servlet:
@@ -45,10 +52,10 @@ spring:
       
 file: 
   path: G:/workspace/springWork/jpa-crud/src/main/resources/upload/
-  '''
+```
   
   
-  '''xml
+```xml
   <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -137,4 +144,4 @@ file:
 	</build>
 
 </project>
-'''
+```
