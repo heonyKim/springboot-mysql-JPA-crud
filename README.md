@@ -1,6 +1,5 @@
 # springboot-mysql-JPA-crud
 
-
 '''yml
 server:
   port: 8070
